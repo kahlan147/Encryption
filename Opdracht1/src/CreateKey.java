@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 
 
 /*
@@ -20,6 +21,19 @@ public class CreateKey {
         System.out.println(key);
         System.out.println("------------------------------------- \n");
         writeKeyToText(key.publicKey.toString(), key.privateKey.toString());
+
+        RSA polka = new RSA(bits);
+         String s = "test";
+         byte[] bytes = s.getBytes();
+         BigInteger message = new BigInteger(bytes);
+
+        BigInteger encrypt = polka.encryptWithKey(message, key.publicKey);
+        BigInteger decrypt = polka.decryptWithKey(encrypt, key.privateKey);
+        System.out.println("message   = " + message);
+        System.out.println("encrypted = " + encrypt);
+        System.out.println("decrypted = " + decrypt);
+
+        System.out.println("test = " + new String(decrypt.toByteArray()));
     }
 
     private void writeKeyToText(String publicKey, String privateKey){
@@ -59,5 +73,7 @@ public class CreateKey {
 
             }
         }
+
+
     }
 }

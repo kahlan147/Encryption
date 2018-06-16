@@ -1,4 +1,5 @@
-
+import java.io.*;
+import java.math.BigInteger;
 
 public class ReadFile {
     /*
@@ -9,6 +10,56 @@ public class ReadFile {
      */
 
     public static void main(String[] args){
+        String name = "Lk";
+        ReadFile readFile = new ReadFile();
+        readFile.readInput();
+    }
 
+    private void writeInputToText(String name, String content) {
+
+        String path = "Opdracht1/src/INPUT(SIGNEDBY" + name + ").txt";
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+
+        try {
+            fileWriter = new FileWriter(path);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(content);
+
+        }
+        catch (IOException e) {
+            System.out.println("error");
+        }
+        finally {
+
+            try {
+
+                if (bufferedWriter != null)
+                    bufferedWriter.close();
+
+                if (fileWriter != null)
+                    fileWriter.close();
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+
+            }
+        }
+    }
+
+    private void readInput(){
+        String path = "Opdracht1/src/SignatureKey_private.txt";
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+
+        try{
+            fileReader = new FileReader(path);
+            bufferedReader = new BufferedReader(fileReader);
+            System.out.println(bufferedReader.readLine());
+        }
+        catch(IOException e) {
+            System.out.println("error");
+        }
     }
 }

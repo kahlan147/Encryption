@@ -8,7 +8,7 @@ public class RSA {
 
     public BigInteger privateKey;
     public BigInteger publicKey;
-    private BigInteger modulus;
+    public BigInteger modulus;
 
     // generate an N-bit (roughly) public and private key
     RSA(int N) {
@@ -27,6 +27,16 @@ public class RSA {
     }
 
     BigInteger decrypt(BigInteger encrypted) {
+        return encrypted.modPow(privateKey, modulus);
+    }
+
+    BigInteger encryptWithKey(BigInteger message, BigInteger publicKey) {
+        System.out.println(modulus);
+        return message.modPow(publicKey, modulus);
+    }
+
+    BigInteger decryptWithKey(BigInteger encrypted, BigInteger privateKey) {
+        System.out.println(modulus);
         return encrypted.modPow(privateKey, modulus);
     }
 
