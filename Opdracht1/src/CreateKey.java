@@ -11,18 +11,20 @@ RSATest (listing 20 in [1]) voor gebruiken.
 public class CreateKey {
 
     public static void main(String[] args) {
-        int N = 1024;
-        RSA key = new RSA(N);
-
-        System.out.println(key);
-
-        new CreateKey().writeKeyToText("test", key.publicKey.toString(), key.privateKey.toString());
-
-
+        new CreateKey(1024);
     }
 
-    private void writeKeyToText(String path, String publicKey, String privateKey){
+    public CreateKey(int bits){
+        RSA key = new RSA(bits);
+        System.out.println("\n------------------------------------- \nThe keys are: ");
+        System.out.println(key);
+        System.out.println("------------------------------------- \n");
+        writeKeyToText(key.publicKey.toString(), key.privateKey.toString());
+    }
 
+    private void writeKeyToText(String publicKey, String privateKey){
+
+        String path = "Opdracht1/src/SignatureKey";
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
@@ -30,7 +32,7 @@ public class CreateKey {
             fileWriter = new FileWriter(path + "_public.txt");
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(publicKey);
-            
+
             bufferedWriter.close();
             fileWriter.close();
 
