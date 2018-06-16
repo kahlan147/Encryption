@@ -1,6 +1,5 @@
-/**
- * Created by Niels Verheijen on 16/06/2018.
- */
+
+
 public class VerifySignature {
 
     /*

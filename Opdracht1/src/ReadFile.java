@@ -1,6 +1,5 @@
-/**
- * Created by Niels Verheijen on 16/06/2018.
- */
+
+
 public class ReadFile {
     /*
     De tweede applicatie leest een file die een private sleutel bevat en een andere file (die we even INPUT.EXT zullen

@@ -1,37 +1,58 @@
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
-/**
- * Created by Niels Verheijen on 16/06/2018.
+
+/*
+De eerste applicatie genereert een publieke sleutel van 1024 bits volgens het RSA-algoritme en de bijbehorende
+private sleutel en schrijft beide sleutels in afzonderlijke files weg. Je kunt hier een variant van het  programma
+RSATest (listing 20 in [1]) voor gebruiken.
  */
 public class CreateKey {
 
-    private final static SecureRandom random = new SecureRandom();
-
-    /*
-    De eerste applicatie genereert een publieke sleutel van 1024 bits volgens het RSA-algoritme en de bijbehorende
-    private sleutel en schrijft beide sleutels in afzonderlijke files weg. Je kunt hier een variant van het  programma
-    RSATest (listing 20 in [1]) voor gebruiken.
-     */
-
-    public static void main(String[] args){
-        int N = 938;
+    public static void main(String[] args) {
+        int N = 1024;
         RSA key = new RSA(N);
 
         System.out.println(key);
 
-        // create random message, encrypt and decrypt
-        BigInteger message = new BigInteger(N-1, random);
+        new CreateKey().writeKeyToText("test", key.publicKey.toString(), key.privateKey.toString());
 
-        //// create message by converting string to integer
-        // String s = "test";
-        // byte[] bytes = s.getBytes();
-        // BigInteger message = new BigInteger(bytes);
 
-        BigInteger encrypt = key.encrypt(message);
-        BigInteger decrypt = key.decrypt(encrypt);
-        System.out.println("message   = " + message);
-        System.out.println("encrypted = " + encrypt);
-        System.out.println("decrypted = " + decrypt);
+    }
+
+    private void writeKeyToText(String path, String publicKey, String privateKey){
+
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+
+        try {
+            fileWriter = new FileWriter(path + "_public.txt");
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(publicKey);
+
+            fileWriter = new FileWriter(path + "_private.txt");
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(privateKey);
+        }
+        catch(IOException e) {
+            System.out.println("error");
+        }
+        finally {
+
+            try {
+
+                if (bufferedWriter != null)
+                    bufferedWriter.close();
+
+                if (fileWriter != null)
+                    fileWriter.close();
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+
+            }
+        }
     }
 }
