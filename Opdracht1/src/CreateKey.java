@@ -30,6 +30,9 @@ public class CreateKey {
             fileWriter = new FileWriter(path + "_public.txt");
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(publicKey);
+            
+            bufferedWriter.close();
+            fileWriter.close();
 
             fileWriter = new FileWriter(path + "_private.txt");
             bufferedWriter = new BufferedWriter(fileWriter);
