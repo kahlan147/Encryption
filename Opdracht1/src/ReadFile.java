@@ -9,13 +9,41 @@ public class ReadFile {
     digitale handtekening (gemaakt met het algoritme 'SHA1withRSA') en de inhoud van file INPUT.EXT.
      */
 
+    private final static String INPUTPATH = "Opdracht1/src/Input.txt";
+    private final static String PRIVATEKEYPATH = "Opdracht1/src/SignatureKey_private.txt";
+
     public static void main(String[] args){
         String name = "Lk";
         ReadFile readFile = new ReadFile();
-        readFile.readInput();
+        BigInteger privateKey = readFile.readKey();
+        if(privateKey == null){return;}
+        String content = readFile.readInput();
+        String signature = readFile.encryptText(name, privateKey);
+        readFile.writeInputToText(name, signature, content);
     }
 
-    private void writeInputToText(String name, String content) {
+    private String encryptText(String content, BigInteger key){
+        RSA rsa = new RSA();
+        return rsa.encryptWithKey(new BigInteger(content.getBytes()), key).toString();
+    }
+
+    private String readInput(){
+        StringBuilder text = new StringBuilder();
+        try (FileReader instream = new FileReader(INPUTPATH);
+             BufferedReader buffer = new BufferedReader(instream)) {
+            long length = 0;
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                text.append(line + "\n");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return text.toString();
+    }
+
+    private void writeInputToText(String name, String signature, String content) {
 
         String path = "Opdracht1/src/INPUT(SIGNEDBY" + name + ").txt";
         FileWriter fileWriter = null;
@@ -24,7 +52,9 @@ public class ReadFile {
         try {
             fileWriter = new FileWriter(path);
             bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(content);
+            bufferedWriter.write(signature.length() + "\n");
+            bufferedWriter.write(signature + "\n");
+            bufferedWriter.write(content + "\n");
 
         }
         catch (IOException e) {
@@ -48,18 +78,19 @@ public class ReadFile {
         }
     }
 
-    private void readInput(){
-        String path = "Opdracht1/src/SignatureKey_private.txt";
+    private BigInteger readKey(){
+        String path = PRIVATEKEYPATH;
         FileReader fileReader = null;
         BufferedReader bufferedReader = null;
 
         try{
             fileReader = new FileReader(path);
             bufferedReader = new BufferedReader(fileReader);
-            System.out.println(bufferedReader.readLine());
+            return new BigInteger(bufferedReader.readLine());
         }
         catch(IOException e) {
             System.out.println("error");
         }
+        return null;
     }
 }

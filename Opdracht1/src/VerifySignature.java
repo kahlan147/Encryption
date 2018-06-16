@@ -1,4 +1,7 @@
-
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 
 public class VerifySignature {
 
@@ -7,7 +10,8 @@ public class VerifySignature {
     handtekening. Het resultaat (wel of niet goedgekeurd) wordt gemeld. Als de handtekening klopt wordt bovendien de
     oorspronkelijke file INPUT.EXT gereconstrueerd.
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
 
     }
 }

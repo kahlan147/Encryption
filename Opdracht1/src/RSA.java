@@ -11,7 +11,7 @@ public class RSA {
     public BigInteger modulus;
 
     // generate an N-bit (roughly) public and private key
-    RSA(int N) {
+    public RSA(int N) {
         BigInteger p = BigInteger.probablePrime(N/2, random);
         BigInteger q = BigInteger.probablePrime(N/2, random);
         BigInteger phi = (p.subtract(one)).multiply(q.subtract(one));
@@ -21,23 +21,26 @@ public class RSA {
         privateKey = publicKey.modInverse(phi);
     }
 
+    public RSA(){
+        this.modulus = ReaderWriter.ReadModulusFromProperties();
+    }
 
-    BigInteger encrypt(BigInteger message) {
+    /*
+    //Example
+    private BigInteger encrypt(BigInteger message) {
         return message.modPow(publicKey, modulus);
     }
-
-    BigInteger decrypt(BigInteger encrypted) {
+    //example
+    private BigInteger decrypt(BigInteger encrypted) {
         return encrypted.modPow(privateKey, modulus);
     }
-
-    BigInteger encryptWithKey(BigInteger message, BigInteger publicKey) {
-        System.out.println(modulus);
-        return message.modPow(publicKey, modulus);
+*/
+    public BigInteger encryptWithKey(BigInteger message, BigInteger encryptionKey) {
+        return message.modPow(encryptionKey, modulus);
     }
 
-    BigInteger decryptWithKey(BigInteger encrypted, BigInteger privateKey) {
-        System.out.println(modulus);
-        return encrypted.modPow(privateKey, modulus);
+    public BigInteger decryptWithKey(BigInteger encrypted, BigInteger decryptionKey) {
+        return encrypted.modPow(decryptionKey, modulus);
     }
 
     public String toString() {
@@ -49,7 +52,7 @@ public class RSA {
     }
 
     //args[0] gives error,
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         int N = Integer.parseInt(args[0]);
         RSA key = new RSA(N);
         System.out.println(key);
@@ -67,5 +70,5 @@ public class RSA {
         System.out.println("message   = " + message);
         System.out.println("encrypted = " + encrypt);
         System.out.println("decrypted = " + decrypt);
-    }
+    }*/
 }
