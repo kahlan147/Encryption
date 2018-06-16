@@ -1,0 +1,15 @@
+/**
+ * Created by Niels Verheijen on 16/06/2018.
+ */
+public class ReadFile {
+    /*
+    De tweede applicatie leest een file die een private sleutel bevat en een andere file (die we even INPUT.EXT zullen
+    noemen).   Verder wordt de naam van de ondertekenaar (bijv. Lk) opgegeven. Als output wordt een file met de naam
+    INPUT(SIGNEDBYLK).EXT geproduceerd met de volgende inhoud: de lengte (in bytes) van de digitale handtekening, de
+    digitale handtekening (gemaakt met het algoritme 'SHA1withRSA') en de inhoud van file INPUT.EXT.
+     */
+
+    public static void main(String[] args){
+
+    }
+}

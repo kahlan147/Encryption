@@ -1,0 +1,14 @@
+/**
+ * Created by Niels Verheijen on 16/06/2018.
+ */
+public class VerifySignature {
+
+    /*
+    De derde applicatie leest file INPUT(SIGNEDBYLK).EXT en de publieke sleutel van de ondertekenaar en verifieert de
+    handtekening. Het resultaat (wel of niet goedgekeurd) wordt gemeld. Als de handtekening klopt wordt bovendien de
+    oorspronkelijke file INPUT.EXT gereconstrueerd.
+     */
+    public static void main(String[] args){
+
+    }
+}
