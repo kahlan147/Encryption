@@ -15,9 +15,9 @@ public class ReadFile {
     public static void main(String[] args){
         String name = "Lk";
         ReadFile readFile = new ReadFile();
-        BigInteger privateKey = readFile.readKey();
+        BigInteger privateKey = ReaderWriter.readKey(PRIVATEKEYPATH);
         if(privateKey == null){return;}
-        String content = readFile.readInput();
+        String content = ReaderWriter.readInput(INPUTPATH);
         String signature = readFile.encryptText(name, privateKey);
         readFile.writeInputToText(name, signature, content);
     }
@@ -27,21 +27,7 @@ public class ReadFile {
         return rsa.encryptWithKey(new BigInteger(content.getBytes()), key).toString();
     }
 
-    private String readInput(){
-        StringBuilder text = new StringBuilder();
-        try (FileReader instream = new FileReader(INPUTPATH);
-             BufferedReader buffer = new BufferedReader(instream)) {
-            long length = 0;
-            String line;
-            while ((line = buffer.readLine()) != null) {
-                text.append(line + "\n");
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return text.toString();
-    }
+
 
     private void writeInputToText(String name, String signature, String content) {
 
@@ -76,21 +62,5 @@ public class ReadFile {
 
             }
         }
-    }
-
-    private BigInteger readKey(){
-        String path = PRIVATEKEYPATH;
-        FileReader fileReader = null;
-        BufferedReader bufferedReader = null;
-
-        try{
-            fileReader = new FileReader(path);
-            bufferedReader = new BufferedReader(fileReader);
-            return new BigInteger(bufferedReader.readLine());
-        }
-        catch(IOException e) {
-            System.out.println("error");
-        }
-        return null;
     }
 }

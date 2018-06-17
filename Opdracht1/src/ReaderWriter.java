@@ -57,4 +57,34 @@ public class ReaderWriter {
         }
         return new BigInteger(prop.getProperty(modulusProp));
     }
+
+    public static BigInteger readKey(String path){
+        FileReader fileReader = null;
+        BufferedReader bufferedReader = null;
+
+        try{
+            fileReader = new FileReader(path);
+            bufferedReader = new BufferedReader(fileReader);
+            return new BigInteger(bufferedReader.readLine());
+        }
+        catch(IOException e) {
+            System.out.println("error");
+        }
+        return null;
+    }
+
+    public static String readInput(String path){
+        StringBuilder text = new StringBuilder();
+        try (FileReader instream = new FileReader(path);
+             BufferedReader buffer = new BufferedReader(instream)) {
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                text.append(line + "\n");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return text.toString();
+    }
 }
