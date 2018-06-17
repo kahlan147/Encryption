@@ -1,13 +1,16 @@
+package Main;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.util.Properties;
 
 public class ReaderWriter {
 
-    private final static String KEY = "Opdracht1/src/SignatureKey";
-    private final static String CONFIG = "Opdracht1/src/config.properties";
+    private final static String KEY = "Opdracht1/src/Main/Files/SignatureKey";
+    private final static String CONFIG = "Opdracht1/src/Main/Files/config.properties";
     private final static String MODULUSPROP = "modulus";
-    private final static String DECODEDINPUT = "Opdracht1/src/DecodedInput.txt";
+    private final static String DECODEDINPUT = "Opdracht1/src/Main/Files/DecodedInput.txt";
+    private final static String INPUT = "Opdracht1/src/Main/Files/INPUT(SIGNEDBY";
 
     public static void SaveModulusToProperties(BigInteger modulus) {
         Properties prop = new Properties();
@@ -66,7 +69,7 @@ public class ReaderWriter {
             bufferedReader = new BufferedReader(fileReader);
             return new BigInteger(bufferedReader.readLine());
         } catch (IOException e) {
-            System.out.println("error");
+            e.printStackTrace();
         } finally {
             closeChannels(bufferedReader, fileReader);
         }
@@ -104,7 +107,7 @@ public class ReaderWriter {
             bufferedWriter.write(message);
 
         } catch (IOException e) {
-            System.out.println("error");
+            e.printStackTrace();
         } finally {
             closeChannels(bufferedWriter, fileWriter);
         }
@@ -128,7 +131,7 @@ public class ReaderWriter {
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(privateKey);
         } catch (IOException e) {
-            System.out.println("error");
+            e.printStackTrace();
         } finally {
             closeChannels(bufferedWriter, fileWriter);
         }
@@ -136,7 +139,7 @@ public class ReaderWriter {
 
     public static void writeInputToText(String name, String signature, String content) {
 
-        String path = "Opdracht1/src/INPUT(SIGNEDBY" + name + ").txt";
+        String path = INPUT + name + ").txt";
         FileWriter fileWriter = null;
         BufferedWriter bufferedWriter = null;
 
@@ -148,7 +151,7 @@ public class ReaderWriter {
             bufferedWriter.write(content + "\n");
 
         } catch (IOException e) {
-            System.out.println("error");
+            e.printStackTrace();
         } finally {
             closeChannels(bufferedWriter, fileWriter);
 
