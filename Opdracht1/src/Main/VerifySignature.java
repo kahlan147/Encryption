@@ -1,10 +1,12 @@
+package Main;
+
 import java.math.BigInteger;
 
 public class VerifySignature {
 
 
-    private final static String SIGNEDINPUTPATH = "Opdracht1/src/INPUT(SIGNEDBYLk).txt";
-    private final static String PUBLICKEYPATH = "Opdracht1/src/SignatureKey_public.txt";
+    private final static String SIGNEDINPUTPATH = "Opdracht1/src/Main/Files/INPUT(SIGNEDBY";
+    private final static String PUBLICKEYPATH = "Opdracht1/src/Main/Files/SignatureKey_public.txt";
 
     /*
     De derde applicatie leest file INPUT(SIGNEDBYLK).EXT en de publieke sleutel van de ondertekenaar en verifieert de
@@ -21,14 +23,18 @@ public class VerifySignature {
 
     public VerifySignature(BigInteger publicKey, String signature){
 
-        String[] data = getSavedInput();
+        String[] data = getSavedInput(signature);
         if(verifySignature(data[0], data[1], signature, publicKey)){
             ReaderWriter.writeDecodedInput(data[2]);
+            System.out.println("Message decoded to DecodedInput.txt");
+        }
+        else{
+            System.out.println("Incorrect key or signature");
         }
     }
 
-    private String[] getSavedInput(){
-        String signedInput = ReaderWriter.readInput(SIGNEDINPUTPATH);
+    private String[] getSavedInput(String signature){
+        String signedInput = ReaderWriter.readInput(SIGNEDINPUTPATH + signature + ").txt");
         String[] data = new String[3];
         int endFirstRow = signedInput.indexOf("\n");
         int endSecondRow = signedInput.indexOf("\n", endFirstRow +2);
