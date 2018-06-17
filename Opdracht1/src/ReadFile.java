@@ -1,4 +1,4 @@
-import java.io.*;
+
 import java.math.BigInteger;
 
 public class ReadFile {
@@ -13,13 +13,15 @@ public class ReadFile {
     private final static String PRIVATEKEYPATH = "Opdracht1/src/SignatureKey_private.txt";
 
     public static void main(String[] args){
-        String name = "Lk";
-        ReadFile readFile = new ReadFile();
+        new ReadFile("Lk");
+    }
+
+    public ReadFile(String name){
         BigInteger privateKey = ReaderWriter.readKey(PRIVATEKEYPATH);
         if(privateKey == null){return;}
         String content = ReaderWriter.readInput(INPUTPATH);
-        String signature = readFile.encryptText(name, privateKey);
-        readFile.writeInputToText(name, signature, content);
+        String signature = encryptText(name, privateKey);
+        ReaderWriter.writeInputToText(name, signature, content);
     }
 
     private String encryptText(String content, BigInteger key){
@@ -29,38 +31,5 @@ public class ReadFile {
 
 
 
-    private void writeInputToText(String name, String signature, String content) {
 
-        String path = "Opdracht1/src/INPUT(SIGNEDBY" + name + ").txt";
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
-
-        try {
-            fileWriter = new FileWriter(path);
-            bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(signature.length() + "\n");
-            bufferedWriter.write(signature + "\n");
-            bufferedWriter.write(content + "\n");
-
-        }
-        catch (IOException e) {
-            System.out.println("error");
-        }
-        finally {
-
-            try {
-
-                if (bufferedWriter != null)
-                    bufferedWriter.close();
-
-                if (fileWriter != null)
-                    fileWriter.close();
-
-            } catch (IOException ex) {
-
-                ex.printStackTrace();
-
-            }
-        }
-    }
 }

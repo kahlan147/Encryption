@@ -1,6 +1,4 @@
-import java.io.*;
 import java.math.BigInteger;
-import java.util.Properties;
 
 public class VerifySignature {
 
@@ -15,28 +13,38 @@ public class VerifySignature {
      */
     public static void main(String[] args) {
         BigInteger publicKey = ReaderWriter.readKey(PUBLICKEYPATH);
-        String signedInput = ReaderWriter.readInput(SIGNEDINPUTPATH);
         String signature = "Lk";
 
-        VerifySignature verifySignature = new VerifySignature(publicKey, signedInput, signature);
+        new VerifySignature(publicKey, signature);
 
     }
 
-    public VerifySignature(BigInteger publicKey, String signedInput, String signature){
+    public VerifySignature(BigInteger publicKey, String signature){
+
+        String[] data = getSavedInput();
+        if(verifySignature(data[0], data[1], signature, publicKey)){
+            ReaderWriter.writeDecodedInput(data[2]);
+        }
+    }
+
+    private String[] getSavedInput(){
+        String signedInput = ReaderWriter.readInput(SIGNEDINPUTPATH);
         String[] data = new String[3];
         int endFirstRow = signedInput.indexOf("\n");
         int endSecondRow = signedInput.indexOf("\n", endFirstRow +2);
         data[0] = signedInput.substring(0, endFirstRow);
         data[1] = signedInput.substring(endFirstRow + 1, endSecondRow);
         data[2] = signedInput.substring(endSecondRow +1);
+        return data;
+    }
 
-        if(Integer.parseInt(data[0]) == data[1].length()){
+    private boolean verifySignature(String length, String encryptedSignature, String signature, BigInteger publicKey){
+        if(Integer.parseInt(length) == encryptedSignature.length()){
             RSA rsa = new RSA();
-            String decodedSignature = new String(rsa.decryptWithKey(new BigInteger(data[1]), publicKey).toByteArray());
-            if(signature.equals(decodedSignature)){
-                System.out.println(data[2]);
-            }
+            String decodedSignature = new String(rsa.decryptWithKey(new BigInteger(encryptedSignature), publicKey).toByteArray());
+            return signature.equals(decodedSignature);
         }
+        return false;
     }
 
 }
