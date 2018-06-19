@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/Encryption.iml" filepath="$PROJECT_DIR$/Encryption.iml" />
       <module fileurl="file://$PROJECT_DIR$/Opdracht1/Opdracht1.iml" filepath="$PROJECT_DIR$/Opdracht1/Opdracht1.iml" />
       <module fileurl="file://$PROJECT_DIR$/Opdracht2/Opdracht2.iml" filepath="$PROJECT_DIR$/Opdracht2/Opdracht2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/StreamManager/StreamManager.iml" filepath="$PROJECT_DIR$/StreamManager/StreamManager.iml" />
     </modules>
   </component>
 </project>
