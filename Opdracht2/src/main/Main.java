@@ -18,8 +18,7 @@ public class Main
         mainForm.setContentPane(new MainForm().getMainPanel());
         mainForm.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainForm.pack();
-        
-
+        mainForm.setLocationRelativeTo(null);
         mainForm.setVisible(true);
     }
 }

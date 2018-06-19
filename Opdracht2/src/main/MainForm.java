@@ -56,29 +56,11 @@ public class MainForm
     {
         encryptButton.setActionCommand("Encrypt");
         decryptButton.setActionCommand("Decrypt");
-        encryptButton.addActionListener(e ->
-        {
-            try
-            {
-                actionPerformed(e);
-            } catch (RemoteException e1)
-            {
-                e1.printStackTrace();
-            }
-        });
-        decryptButton.addActionListener(e ->
-        {
-            try
-            {
-                actionPerformed(e);
-            } catch (RemoteException e1)
-            {
-                e1.printStackTrace();
-            }
-        });
+        encryptButton.addActionListener(this::actionPerformed);
+        decryptButton.addActionListener(this::actionPerformed);
     }
 
-    private void actionPerformed(ActionEvent e) throws RemoteException
+    private void actionPerformed(ActionEvent e)
     {
         if ("Encrypt".equals(e.getActionCommand()))
         {
