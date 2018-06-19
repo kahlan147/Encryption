@@ -12,6 +12,7 @@ public class CreateKey {
         new CreateKey(1024);
     }
 
+    //Creates and writes keys to a file.
     public CreateKey(int bits){
 
         RSA key = new RSA(bits);

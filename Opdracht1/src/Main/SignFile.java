@@ -2,7 +2,7 @@ package Main;
 
 import java.math.BigInteger;
 
-public class ReadFile {
+public class SignFile {
     /*
     De tweede applicatie leest een file die een private sleutel bevat en een andere file (die we even INPUT.EXT zullen
     noemen).   Verder wordt de naam van de ondertekenaar (bijv. Lk) opgegeven. Als output wordt een file met de naam
@@ -14,10 +14,11 @@ public class ReadFile {
     private final static String PRIVATEKEYPATH = "Opdracht1/src/Main/Files/SignatureKey_private.txt";
 
     public static void main(String[] args){
-        new ReadFile("test");
+        String signature = "test";
+        new SignFile(signature);
     }
 
-    public ReadFile(String signature){
+    public SignFile(String signature){
         BigInteger privateKey = ReaderWriter.readKey(PRIVATEKEYPATH);
         if(privateKey == null){return;}
         String content = ReaderWriter.readInput(INPUTPATH);
@@ -26,9 +27,10 @@ public class ReadFile {
         System.out.println("Message encrypted and stored");
     }
 
-    private String encryptSignature(String content, BigInteger key){
+    //Encrypt the given signature
+    private String encryptSignature(String signature, BigInteger key){
         RSA rsa = new RSA();
-        return rsa.encryptWithKey(new BigInteger(content.getBytes()), key).toString();
+        return rsa.encryptWithKey(new BigInteger(signature.getBytes()), key).toString();
     }
 
 
