@@ -10,7 +10,6 @@ import javax.security.auth.DestroyFailedException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.rmi.RemoteException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
@@ -30,7 +29,7 @@ public class MainForm
     private static final String GENERATOR_ALGORITHM = "SHA1PRNG";
 
     private static final int KEY_SIZE_IN_BITS = 128;
-    private static final int IV_SIZE_IN_BITS = 128;
+    private static final int SALT_SIZE_IN_BITS = 128;
     private static final int TAG_SIZE_IN_BITS = 128;
     private static final int ITERATION_COUNT = 200000;
 
@@ -152,19 +151,19 @@ public class MainForm
 
     /**
      * Generates an Initialization Vector.
-     * IVs need to be cryptographically secure and completely random.
-     * You must always treat IVs as secret until you've used them in your encryption step.
+     * Salts need to be cryptographically secure and completely random.
+     * You must always treat Salts as secret until you've used them in your encryption step.
      * After the encryption step, you can store them plainly.
-     * IVs must be used only once per encryption step. After that, they must only be used to decrypt.
+     * Salts must be used only once per encryption step. After that, they must only be used to decrypt.
      */
-    private byte[] generateIV()
+    private byte[] generateSalt()
     {
         try
         {
             SecureRandom random = SecureRandom.getInstance(GENERATOR_ALGORITHM);
-            byte[] iv = new byte[IV_SIZE_IN_BITS / 8];
-            random.nextBytes(iv);
-            return iv;
+            byte[] salt = new byte[SALT_SIZE_IN_BITS / 8];
+            random.nextBytes(salt);
+            return salt;
         }
         catch (NoSuchAlgorithmException e)
         {
@@ -175,16 +174,16 @@ public class MainForm
 
     /**
      * Creates and initializes a new cipher.
-     * A key is generated from the password, using the IV as the salt.
-     * The IV is also used for encryption.
+     * A key is generated from the password, using a salt.
+     * The Salt is also used for encryption.
      */
-    private Cipher initCipher(int mode, char[] password, byte[] iv)
+    private Cipher initCipher(int mode, char[] password, byte[] salt)
     {
         // We're using AES in Galois Counter Mode, here we're preparing the spec.
         // The tag size is the size of the tag that AES-GCM uses to sign and authenticate the encrypted data with.
         // Authentication is important, because it helps us detect that a message wasn't forged by an attacker.
-        GCMParameterSpec gcmSpec = new GCMParameterSpec(TAG_SIZE_IN_BITS, iv);
-        SecretKey key = generateKey(password, iv);
+        GCMParameterSpec gcmSpec = new GCMParameterSpec(TAG_SIZE_IN_BITS, salt);
+        SecretKey key = generateKey(password, salt);
 
         try
         {
@@ -215,24 +214,24 @@ public class MainForm
 
     /**
      * Encrypts a message with a password.
-     * The result is a concatenation of the IV and the ciphertext.
+     * The result is a concatenation of the Salt and the ciphertext.
      * The message and the password should be treated as secret, obviously.
      * The result can be stored plainly.
-     * A different IV is used each time, so encrypting the same message twice will (and SHOULD) have completely different results.
+     * A different Salt is used each time, so encrypting the same message twice will (and SHOULD) have completely different results.
      */
     private void encrypt(File file, char[] password)
     {
         try
         {
-            byte[] iv = generateIV();
+            byte[] salt = generateSalt();
 
-            Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, password, iv);
+            Cipher cipher = initCipher(Cipher.ENCRYPT_MODE, password, salt);
             byte[] ciphertext = cipher.doFinal(textMessageInput.getText().getBytes());
 
-            // The IV needs to be stored with the ciphertext, otherwise we can't decrypt the message later.
-            byte[] result = new byte[iv.length + ciphertext.length];
-            System.arraycopy(iv, 0, result, 0, iv.length);
-            System.arraycopy(ciphertext, 0, result, iv.length, ciphertext.length);
+            // The Salt needs to be stored with the ciphertext, otherwise we can't decrypt the message later.
+            byte[] result = new byte[salt.length + ciphertext.length];
+            System.arraycopy(salt, 0, result, 0, salt.length);
+            System.arraycopy(ciphertext, 0, result, salt.length, ciphertext.length);
 
             textMessageInput.setText("");
 
@@ -246,7 +245,7 @@ public class MainForm
 
     /**
      * Decrypts a message that was encrypted with the given password.
-     * The encrypted message must be a concatenation of IV and ciphertext.
+     * The encrypted message must be a concatenation of Salt and ciphertext.
      *
      * @throws BadPaddingException If the password and encrypted message don't match.
      */
@@ -257,10 +256,10 @@ public class MainForm
 
             byte[] encrypted = srw.ReadFromFile(file);
 
-            byte[] iv = Arrays.copyOfRange(encrypted, 0, IV_SIZE_IN_BITS / 8);
-            byte[] ciphertext = Arrays.copyOfRange(encrypted, iv.length, encrypted.length);
+            byte[] salt = Arrays.copyOfRange(encrypted, 0, SALT_SIZE_IN_BITS / 8);
+            byte[] ciphertext = Arrays.copyOfRange(encrypted, salt.length, encrypted.length);
 
-            Cipher cipher = initCipher(Cipher.DECRYPT_MODE, password, iv);
+            Cipher cipher = initCipher(Cipher.DECRYPT_MODE, password, salt);
             byte[] message = cipher.doFinal(ciphertext);
 
             textMessageInput.setText(new String(message));
