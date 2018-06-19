@@ -15,7 +15,7 @@ public class VerifySignature {
      */
     public static void main(String[] args) {
         BigInteger publicKey = ReaderWriter.readKey(PUBLICKEYPATH);
-        String signature = "Lk";
+        String signature = "test";
 
         new VerifySignature(publicKey, signature);
 
@@ -27,12 +27,14 @@ public class VerifySignature {
         if(verifySignature(data[0], data[1], signature, publicKey)){
             ReaderWriter.writeDecodedInput(data[2]);
             System.out.println("Message decoded to DecodedInput.txt");
+            System.out.println("Message is: \n" + data[2]);
         }
         else{
             System.out.println("Incorrect key or signature");
         }
     }
 
+    //Get the data from the encrypted file
     private String[] getSavedInput(String signature){
         String signedInput = ReaderWriter.readInput(SIGNEDINPUTPATH + signature + ").txt");
         String[] data = new String[3];
@@ -44,6 +46,7 @@ public class VerifySignature {
         return data;
     }
 
+    //Verifies whether the encrypted signature with the original String
     private boolean verifySignature(String length, String encryptedSignature, String signature, BigInteger publicKey){
         if(Integer.parseInt(length) == encryptedSignature.length()){
             RSA rsa = new RSA();
