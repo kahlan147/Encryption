@@ -266,7 +266,7 @@ public class MainForm
         }
         catch (IllegalBlockSizeException | BadPaddingException e)
         {
-            e.printStackTrace();
+            textMessageInput.setText("Error decrypting file.\nPassword likely incorrect.");
         }
     }
 }
